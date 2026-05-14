@@ -1,0 +1,392 @@
+/**
+ * ══════════════════════════════════════════════════════════════
+ * KirbySage — Estilos "Dream Land Nocturno" (REDISEÑADO)
+ * Archivo: styles.css
+ * ══════════════════════════════════════════════════════════════
+ */
+:root {
+  /* 🌑 Paleta Nocturna Fría */
+  --bg-night-top:  #1A1A40; 
+  --bg-night-btm:  #2D033B; 
+  
+  /* Tarjetas translúcidas tipo "Glassmorphism" */
+  --card:          rgba(248, 240, 255, 0.92); 
+  --card-alt:      rgba(230, 230, 250, 0.8); 
+  
+  /* Kirby Fucsia Frío */
+  --kirby-pink:    #D14D9C; 
+  --kirby-feet:    #9C004F; 
+  
+  /* Acentos mágicos */
+  --star-yellow:   #E0E0FF; 
+  --star-bright:   #40E0D0; 
+  
+  /* Textos Principales */
+  --ink:           #FFFFFF; /* Texto global claro para el fondo nocturno */
+  --ink-dark:      #1F1F1F; /* Texto oscuro para el interior de las tarjetas */
+  --ink-mid:       #E0E0FF; /* Lavanda claro */
+
+  --border:        #B04184;
+  --border-lt:     #C878AA;
+
+  --font-m:    'Fredoka', sans-serif;
+  --shadow-cartoon: 0 8px 0 rgba(0, 0, 0, 0.4);
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: var(--font-m);
+  background: linear-gradient(180deg, var(--bg-night-top) 0%, var(--bg-night-btm) 100%);
+  color: var(--ink);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+#bg-canvas {
+  position: fixed; top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 0; pointer-events: none;
+}
+
+#vanta-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1; /* Se queda en la capa más profunda */
+}
+
+/* ── BOTONES GLOBALES SOBRE FONDO OSCURO ── */
+#music-toggle {
+  position: fixed; top: 20px; right: 20px; z-index: 100;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(5px);
+  color: #FFFFFF;
+  border: 2px solid var(--star-bright);
+  border-radius: 20px;
+  padding: 10px 20px; font-weight: 700; font-family: var(--font-m);
+  cursor: pointer; box-shadow: 0 4px 0 var(--border-lt);
+  transition: 0.2s;
+}
+#music-toggle:active { transform: translateY(4px); box-shadow: 0 0 0 transparent; }
+
+.reset-link {
+  background: none; border: none; 
+  color: var(--star-bright);
+  text-shadow: 0 0 10px rgba(64, 224, 208, 0.5);
+  font-size: 0.8rem; font-weight: 600; cursor: pointer;
+  margin-top: 1.5rem; display: block; width: 100%;
+}
+
+/* ── ESTRUCTURA APP ── */
+#app {
+  position: relative; z-index: 2;
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  padding: 2rem 1.5rem;
+}
+
+.phase { display: none; width: 100%; max-width: 900px; }
+.phase.active { display: block; animation: fadePop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+
+@keyframes fadePop {
+  0%   { opacity: 0; transform: scale(0.95) translateY(10px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* ── TARJETA PRINCIPAL BLANCA ── */
+.card {
+  background: var(--card);
+  border: 4px solid var(--border);
+  border-radius: 30px;
+  box-shadow: var(--shadow-cartoon);
+  padding: 2.5rem;
+  position: relative;
+  color: var(--ink-dark); /* Por defecto, el texto dentro de las tarjetas es oscuro */
+}
+
+/* ── FASE: INICIO ── */
+#phase-intro { text-align: center; max-width: 550px; margin: 0 auto; }
+
+.intro-eyebrow {
+  font-size: 0.8rem; font-weight: 600;
+  color: var(--kirby-feet);
+  text-transform: uppercase; letter-spacing: 0.1em;
+  margin-bottom: 1rem;
+}
+
+.logo {
+  font-size: 4rem; font-weight: 700;
+  color: var(--kirby-pink);
+  text-shadow: 3px 3px 0 var(--kirby-feet);
+  margin-bottom: 0.5rem;
+  line-height: 1;
+}
+.logo em { font-style: normal; color: var(--star-yellow); text-shadow: 3px 3px 0 var(--star-bright); }
+
+.logo-tagline { font-size: 1rem; font-weight: 600; color: var(--ink-mid); margin-bottom: 2rem; }
+.intro-desc { font-size: 1rem; line-height: 1.6; margin-bottom: 2rem; color: #E0E0FF; }
+
+.stats-row { display: flex; gap: 10px; margin-bottom: 2rem; }
+.stat-cell {
+  flex: 1; padding: 1rem;
+  background: var(--card-alt);
+  border: 3px solid var(--border-lt);
+  border-radius: 20px;
+}
+.stat-n { font-size: 1.8rem; font-weight: 700; color: var(--kirby-pink); display: block; }
+.stat-l { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; color: #555555; }
+
+/* ── BOTONES ACCIÓN ── */
+button { font-family: var(--font-m); }
+
+.btn-start, .btn-save, .btn-act.primary {
+  background: var(--kirby-pink);
+  color: white; font-size: 1.1rem; font-weight: 600;
+  padding: 1rem 2.5rem;
+  border: 3px solid var(--kirby-feet);
+  border-radius: 25px; cursor: pointer;
+  box-shadow: 0 5px 0 var(--kirby-feet);
+  transition: all 0.1s;
+}
+.btn-start:hover, .btn-save:hover, .btn-act.primary:hover { transform: translateY(2px); box-shadow: 0 3px 0 var(--kirby-feet); }
+.btn-start:active, .btn-save:active, .btn-act.primary:active { transform: translateY(5px); box-shadow: 0 0 0 transparent; }
+
+/* Botón Secundario (Inicio) rediseñado */
+.btn-act.secondary {
+  padding: 1rem 2.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 25px;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--kirby-feet);
+  border: 3px solid var(--border-lt);
+  box-shadow: 0 5px 0 var(--border-lt);
+  transition: all 0.1s;
+}
+.btn-act.secondary:hover { transform: translateY(2px); box-shadow: 0 3px 0 var(--border-lt); }
+.btn-act.secondary:active { transform: translateY(5px); box-shadow: 0 0 0 transparent; }
+
+/* ── FASE: PREGUNTAS ── */
+.q-topbar { display: flex; justify-content: space-between; font-weight: 600; margin-bottom: 1rem; color: var(--ink-mid); }
+.q-brand { color: var(--kirby-pink); font-size: 1.2rem; }
+.q-brand span { color: var(--star-yellow); text-shadow: 1px 1px 0 var(--star-bright); }
+
+/* Barra de progreso corregida */
+.progress-track {
+  height: 18px; /* Ligeramente más gruesa */
+  background: rgba(0, 0, 0, 0.2); 
+  border: 3px solid var(--border-lt);
+  border-radius: 10px; 
+  margin-bottom: 3rem; /* Más espacio para que no choque con las cartas */
+  position: relative; /* IMPORTANTE para anclar al GIF */
+  overflow: visible; /* IMPORTANTE para que el GIF pueda sobresalir de la barra */
+}
+
+.progress-fill { 
+  height: 100%; 
+  
+  /* Usamos background-image e !important para forzar el cambio */
+  background-image: linear-gradient(
+    to bottom,
+    #FF0000 0%, #FF0000 20%,
+    #FFD700 20%, #FFD700 40%,
+    #00FF00 40%, #00FF00 60%,
+    #0080FF 60%, #0080FF 80%,
+    #6600CC 80%, #6600CC 100%
+  ) !important;
+  
+  border-radius: 7px; 
+  transition: width 0.4s ease-out; 
+}
+
+/* EL GIF DE KIRBY ESTRELLA */
+.progress-kirby {
+  position: absolute;
+  height: 45px; /* Un poco más pequeño para que no abrume la barra de 16px */
+  width: auto;
+  top: -22px; 
+  left: 0%; 
+  margin-left: -32px; 
+  transition: left 0.4s ease-out; 
+  z-index: 10; 
+  pointer-events: none; 
+}
+
+.progress-fill { height: 100%; background: var(--kirby-pink); transition: 0.4s; }
+
+.q-layout { display: grid; grid-template-columns: 1fr 340px; gap: 1.5rem; }
+@media (max-width: 800px) { .q-layout { grid-template-columns: 1fr; } }
+
+.q-card { padding: 2rem; display: flex; flex-direction: column; justify-content: space-between; }
+.q-kicker { font-weight: 600; color: var(--kirby-feet); font-size: 0.8rem; text-transform: uppercase; margin-bottom: 1rem; }
+.q-text { font-size: 1.6rem; font-weight: 600; line-height: 1.4; flex: 1; color: var(--ink-dark); }
+
+.ans-btns { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 2rem; }
+.btn-yes, .btn-no, .btn-idk {
+  padding: 1rem; border-radius: 15px; font-weight: 600; font-size: 1rem;
+  border: 3px solid; cursor: pointer; box-shadow: 0 4px 0; transition: 0.1s;
+}
+.btn-yes { background: #E8F5E9; color: #2E7D32; border-color: #4CAF50; box-shadow: 0 4px 0 #4CAF50; }
+.btn-idk { background: #E0F7FA; color: #006064; border-color: #00ACC1; box-shadow: 0 4px 0 #00ACC1; } 
+.btn-no  { background: #FFEBEE; color: #C62828; border-color: #F44336; box-shadow: 0 4px 0 #F44336; }
+
+.btn-yes:active { transform: translateY(4px); box-shadow: 0 0 0 #4CAF50; }
+.btn-idk:active { transform: translateY(4px); box-shadow: 0 0 0 #00ACC1; }
+.btn-no:active  { transform: translateY(4px); box-shadow: 0 0 0 #F44336; }
+
+/* ── PANELES E INFERENCIA ── */
+.inf-panel { padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem; }
+.panel-title { font-weight: 700; color: var(--kirby-pink); border-bottom: 2px solid var(--border-lt); padding-bottom: 0.5rem; }
+.panel-sec-label { font-size: 0.75rem; font-weight: 600; color: #666666; text-transform: uppercase; margin-bottom: 0.5rem;}
+.facts-wrap { display: flex; flex-wrap: wrap; gap: 0.3rem; min-height: 26px; }
+
+.tag { display: inline-block; font-size: 0.75rem; font-weight: 600; padding: 0.3rem 0.6rem; border-radius: 10px; margin: 2px; }
+.tag-yes { background: #E8F5E9; color: #2E7D32; border: 2px solid #81C784; }
+.tag-no  { background: #FFEBEE; color: #C62828; border: 2px solid #E57373; }
+.tag-intr{ background: #E0F7FA; color: #00838F; border: 2px solid #4DD0E1; } 
+
+/* Log del Sistema corregido */
+.log-box {
+  background: rgba(255, 255, 255, 0.6); 
+  border: 2px solid var(--border-lt);
+  border-radius: 12px; padding: 1rem; font-size: 0.8rem; font-weight: 500;
+  height: 150px; overflow-y: auto; color: var(--ink-dark);
+}
+.rules-bar { display: flex; align-items: center; gap: 0.6rem; }
+.rules-n { font-size: 1.4rem; font-weight: 700; color: var(--kirby-pink); min-width: 2rem; }
+.mini-track { flex: 1; height: 5px; border-radius: 3px; background: var(--border-lt); overflow: hidden; }
+.mini-fill { height: 100%; border-radius: 3px; background: var(--star-yellow); transition: width 0.55s ease; }
+
+/* ── FASE: RESULTADOS ── */
+#phase-result, #phase-learning { max-width: 600px; margin: 0 auto; text-align: center; }
+
+/* Textos oscurecidos y legibles */
+.result-eyebrow { font-weight: 700; color: var(--kirby-feet); font-size: 1.2rem; }
+.result-emoji { font-size: 5rem; display: block; margin: 1rem 0; animation: bounce 1s infinite alternate; }
+.result-img {
+  display: block;
+  margin: 1.5rem auto;
+  
+  /* CAMBIO CLAVE: Ahora controlamos la altura, no el ancho */
+  height: 140px; 
+  width: auto;
+  max-width: 100%; /* Evita que armas muy anchas rompan la tarjeta */
+  object-fit: contain;
+  
+  image-rendering: pixelated; 
+  animation: bounce 1.5s infinite alternate ease-in-out; 
+}
+.result-name { font-size: 3rem; font-weight: 700; color: var(--kirby-pink); }
+.result-sub { font-size: 1.1rem; color: #666666; font-weight: 600; margin-bottom: 0.2rem; }
+.result-desc { font-size: 1.1rem; color: #4A4A4A; margin-bottom: 2rem; font-weight: 500; }
+
+.chain-box { 
+  background: var(--card-alt); 
+  border: 3px solid var(--border-lt); 
+  border-radius: 20px; 
+  padding: 1.5rem; 
+  text-align: left; 
+  margin-bottom: 2rem;
+  color: #333333; /* Texto de los atributos oscuro */
+}
+.chain-title { color: var(--kirby-pink); font-weight: 700; margin-bottom: 1rem; }
+
+.form-input { width: 100%; padding: 1rem; border: 3px solid var(--border-lt); border-radius: 15px; font-family: var(--font-m); font-size: 1rem; outline: none; font-weight: 500;}
+.form-input:focus { border-color: var(--kirby-pink); }
+
+@keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-15px); } }
+
+/* ── GIFs FLOTANTES ── */
+.kirby-gif-float {
+  position: fixed; top: -100px;
+  width: 65px; 
+  z-index: 1; opacity: 0.9;
+  pointer-events: none;
+  animation: fallParaguas linear infinite, sway ease-in-out infinite alternate;
+}
+
+@keyframes fallParaguas { to { top: 110vh; } }
+@keyframes sway {
+  from { transform: translateX(-30px) rotate(-10deg); }
+  to { transform: translateX(30px) rotate(10deg); }
+}
+
+/* LUNA FOTORREALISTA CORREGIDA */
+#real-moon {
+  position: fixed;
+  top: 8%;
+  right: 12%;
+  width: 140px; 
+  z-index: 0; 
+  
+  /* El truco mágico: oculta el fondo negro de la foto real sin dejar aros */
+  mix-blend-mode: screen; 
+  
+  /* Al bajar la opacidad, la luna se tiñe con los colores del fondo.
+     Así, cuando las nubes de Vanta pasen, parecerá que la están tapando. */
+  opacity: 0.6; 
+  
+  pointer-events: none;
+  
+  /* Animación de rotación ultra lenta (150 segundos en dar una vuelta) */
+  animation: spinMoon 150s linear infinite; 
+}
+
+/* Animación para que gire sobre su propio eje */
+@keyframes spinMoon {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   EFECTOS SUTILES (VERSIÓN CORREGIDA)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* 1. Logo Glow Estático (Sin temblores ni escalas) */
+.logo {
+  /* Le damos un brillo base constante y limpio, sin animar el tamaño */
+  text-shadow: 3px 3px 0 var(--kirby-feet), 0 0 20px rgba(64, 224, 208, 0.4); 
+}
+
+/* 2. Efecto de "Glow" al pasar el mouse por las tarjetas (Esto sí se veía bien) */
+.card {
+  transition: box-shadow 0.4s ease;
+}
+
+.card:hover {
+  box-shadow: 0 12px 0 rgba(0, 0, 0, 0.3), 0 0 25px rgba(209, 77, 156, 0.2);
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   ESTILOS DEL FORMULARIO DE APRENDIZAJE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.learn-card { text-align: left; }
+.learn-icon { font-size: 3rem; display: block; text-align: center; margin-bottom: 1rem; }
+.learn-title { color: var(--kirby-pink); font-size: 1.8rem; font-weight: 700; text-align: center; margin-bottom: 0.5rem; }
+.learn-sub { text-align: center; color: #666; margin-bottom: 2rem; font-weight: 500;}
+
+.form-group { margin-bottom: 1.5rem; }
+.form-label { display: block; font-weight: 600; color: var(--kirby-feet); margin-bottom: 0.5rem; }
+
+/* Botones estilo Radio para Sí/No */
+.learn-radio-group { display: flex; gap: 1rem; }
+.learn-radio { 
+  flex: 1; text-align: center; padding: 0.8rem; 
+  border: 3px solid var(--border-lt); border-radius: 12px; 
+  cursor: pointer; font-weight: 600; transition: 0.2s; 
+}
+.learn-radio:hover { background: var(--card-alt); }
+.learn-radio input[type="radio"] { margin-right: 0.5rem; transform: scale(1.2); cursor: pointer; }
+
+/* Botones secundarios invisibles */
+.btn-ghost { 
+  background: transparent; border: none; color: #888; 
+  font-weight: 600; font-family: var(--font-m); cursor: pointer; 
+  width: 100%; margin-top: 1rem; text-decoration: underline; 
+}
+.btn-ghost:hover { color: var(--kirby-pink); }
+.btn-save { width: 100%; }

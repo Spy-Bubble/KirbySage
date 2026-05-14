@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KirbySage · Adivina la Habilidad</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div id="vanta-bg"></div>
+<img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg" id="real-moon" alt="Luna">
+<canvas id="bg-canvas"></canvas>
+
+<button id="music-toggle" onclick="AudioManager.toggle()">🎵 Activar Música</button>
+
+<div id="app">
+  <div id="phase-intro" class="phase active">
+    <div class="intro-eyebrow">Sistema Experto de Dream Land</div>
+    <div class="logo">Kirby<em>Sage</em></div>
+    <div class="logo-tagline">Adivina la habilidad de copia</div>
+    <p class="intro-desc">
+      Piensa en una de las habilidades de copia de Kirby. Responde a mis preguntas y deduciré cuál es usando mi motor de inferencia. ¡Poyo!
+    </p>
+    <div class="stats-row">
+      <div class="stat-cell">
+        <span class="stat-n" id="stat-games">—</span>
+        <div class="stat-l">Habilidades</div>
+      </div>
+      <div class="stat-cell">
+        <span class="stat-n" id="stat-rules">—</span>
+        <div class="stat-l">Reglas</div>
+      </div>
+      <div class="stat-cell">
+        <span class="stat-n" id="stat-qs">—</span>
+        <div class="stat-l">Atributos</div>
+      </div>
+    </div>
+    <button class="btn-start" onclick="startGame()">
+      <span class="btn-start-icon">⭐</span> Comenzar
+    </button>
+    <button class="reset-link" onclick="resetMemory()">
+      ↺ Resetear memoria del sistema
+    </button>
+  </div>
+
+  <div id="phase-questioning" class="phase">
+    <div class="q-topbar">
+      <div class="q-brand">Kirby<span>Sage</span></div>
+      <div class="q-step">
+        Pregunta <strong id="q-num">1</strong> de <strong id="q-total">20</strong>
+      </div>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="prog-fill" style="width:0%"></div>
+      <img src="img/kirby_star.gif" alt="Kirby" class="progress-kirby" id="prog-kirby" style="left:0%">
+    </div>
+
+    <div class="q-layout">
+      <div class="card q-card">
+        <div>
+          <div class="q-kicker">
+            <span class="q-kicker-dot"></span> Analizando atributos
+          </div>
+          <div class="q-text" id="q-text">Cargando…</div>
+        </div>
+        <div class="ans-btns">
+          <button class="btn-yes" onclick="answer(true)">✓ &nbsp;Sí</button>
+          <button class="btn-idk" onclick="answer('idk')">? &nbsp;No sé</button>
+          <button class="btn-no"  onclick="answer(false)">✗ &nbsp;No</button>
+        </div>
+      </div>
+
+      <div class="card inf-panel">
+        <div class="panel-title">
+          <span class="live-dot"></span> Motor de Inferencia
+        </div>
+        <div>
+          <div class="panel-sec-label">Atributos Confirmados</div>
+          <div class="facts-wrap" id="facts-wrap">
+            <span style="color:var(--ink-faint);font-size:.7rem">ninguno aún…</span>
+          </div>
+        </div>
+        <div>
+          <div class="panel-sec-label">Posibles Habilidades</div>
+          <div class="rules-bar">
+            <div class="rules-n" id="alive-num">—</div>
+            <div style="flex:1">
+              <div class="mini-track">
+                <div class="mini-fill" id="mini-fill" style="width:100%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;">
+          <div class="panel-sec-label">Log del Sistema</div>
+          <div class="log-box" id="log-box">
+            <div class="log-line">> Iniciando análisis...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="phase-thinking" class="phase">
+    <div class="think-loader">
+      <div class="think-ring think-ring-1"></div>
+      <div class="think-ring think-ring-2"></div>
+      <div class="think-emoji">🌟</div>
+    </div>
+    <div class="think-label" id="think-label">¡Inhalando datos...!</div>
+    <div class="think-sub">Calculando la habilidad de copia...</div>
+  </div>
+
+  <div id="phase-result" class="phase">
+    <div class="card result-card">
+      <div class="result-eyebrow">¡HABILIDAD ENCONTRADA!</div>
+      
+      <img id="res-img" class="result-img" src="" alt="Portada" style="display: none;">
+      <span class="result-emoji" id="res-emoji">🎮</span>
+      
+      <div class="result-sub">Kirby ha copiado a</div>
+      <div class="result-name" id="res-name">—</div>
+      <div class="result-desc" id="res-desc">—</div>
+
+      <div class="chain-box">
+        <div class="chain-title">Cómo lo supe (Atributos)</div>
+        <div id="res-chain"></div>
+      </div>
+
+      <div class="result-btns">
+        <button class="btn-act primary"   onclick="startGame()">▶ Jugar de nuevo</button>
+        <button class="btn-act secondary" onclick="goToHome()">← Inicio</button>
+      </div>
+    </div>
+  </div>
+
+<div id="phase-learning" class="phase">
+    <div class="card learn-card">
+      <span class="learn-icon">💦</span>
+      <div class="learn-title">¡Me quedé sin aire!</div>
+      <div class="learn-sub">
+        No logré adivinar. Ayúdame a aprender de forma precisa para la próxima vez.
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label">1. ¿En qué habilidad estabas pensando?</label>
+        <input class="form-input" id="l-game" type="text" placeholder="Ej: Kirby Fantasma">
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label">2. Escribe una pregunta de Sí/No que sirva para diferenciarla:</label>
+        <input class="form-input" id="l-feat" type="text" placeholder="Ej: ¿Puede atravesar paredes?">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">3. Para esta habilidad, la respuesta es:</label>
+        <div class="learn-radio-group">
+          <label class="learn-radio"><input type="radio" name="l-ans" value="yes" checked> Sí</label>
+          <label class="learn-radio"><input type="radio" name="l-ans" value="no"> No</label>
+        </div>
+      </div>
+      
+      <button class="btn-save" onclick="learnGame()">💾 Guardar en la Estrella</button>
+      <button class="btn-ghost" onclick="startGame()">Omitir y jugar de nuevo</button>
+      <button class="btn-ghost" onclick="goToHome()">← Volver al inicio</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.clouds.min.js"></script>
+
+<script src="data.js"></script>
+<script src="audio.js"></script>
+<script src="engine.js"></script>
+</body>
+
+<script src="data.js"></script>
+<script src="audio.js"></script> <script src="engine.js"></script>
+</body>
+</html>
